@@ -1,0 +1,27 @@
+from django.db import models
+from .customers import Customer
+from .payment_type import Payment_Type
+
+class Order(models.Model):
+
+    """
+
+    This class creates instances of the order. 
+
+    Author: 
+        Shawna Chatfield
+
+    """
+
+    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    payment_type = models.ForeignKey(Payment_Type, on_delete=models.DO_NOTHING, null=True)
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    class Meta: 
+        ordering = ("created_at", )
+        verbose_name = ("order")
+        verbose_name_plural = ("orders")
+
+    
+    def __str__(self):
+        return f'Order Number: {self.id} Customer: {self.customer.user.first_name} {self.customer.user.last_name}'
