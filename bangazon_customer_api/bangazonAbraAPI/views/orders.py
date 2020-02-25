@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.http import HttpResponseServerError
 from bangazonAPI.models import Order, PaymentType, Customer
 from rest_framework.viewsets import ViewSet
@@ -78,3 +79,7 @@ class Order(ViewSet):
 
         except Exception as ex:
             return Response({"message": ex.args[0]}, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+=======
+
+    
+>>>>>>> master
