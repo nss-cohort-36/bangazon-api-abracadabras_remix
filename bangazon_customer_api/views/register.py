@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
-from bangazon_customer_api.bangazonAbraAPI.models import Customer
+from bangazon_customer_api.models import Customer
 
 @csrf_exempt
 def login_user(request):

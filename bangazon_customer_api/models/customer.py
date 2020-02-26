@@ -17,8 +17,7 @@ class Customer(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
-    class Meta: """ordering = order of how data is presented"""
+    class Meta: 
+        """ordering = order of how data is presented"""
         ordering = (F('user.date_joined').asc(nulls_last=True),)
         ordering = ("created_at",)
-        verbose_name = ("customer")
-        verbose_plural = ("customers")
