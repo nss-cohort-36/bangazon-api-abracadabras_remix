@@ -46,9 +46,11 @@ class ProductTypes(ViewSet):
             
             try:
                 product_type = ProductType.objects.get(pk=pk)
-                serializer = ProductTypeSerializer(product_type, 
+                serializer = ProductTypeSerializer(
+                product_type, 
                 context = {'request': request})
                 return Response(serializer.data)
+            
             except Exception as ex:
                 return HttpResponseServerError(ex)
         
