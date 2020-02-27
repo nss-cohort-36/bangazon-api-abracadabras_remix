@@ -3,3 +3,4 @@ bangazonApiEnv/
 bangazonEnv/
 *.pyc
 __pycache__
+migrations
