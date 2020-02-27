@@ -64,6 +64,6 @@ def register_user(request):
     # Generate a Token for new user acct
     token = Token.objects.create(user=new_user)
 
-    # give token and return to the user/cust/client app
-    data = json.dumps({'token': token.key})
+    # Return the token to the client
+    data = json.dumps({"token": token.key})
     return HttpResponse(data, content_type='application/json')

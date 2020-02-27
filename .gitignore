@@ -4,3 +4,4 @@ bangazonEnv/
 *.pyc
 __pycache__
 migrations
+.vscode/

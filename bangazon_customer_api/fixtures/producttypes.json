@@ -1,0 +1,16 @@
+[
+  {
+    "model": "bangazon_customer_api.ProductType",
+    "pk": 1,
+    "fields": {
+      "name": "Electronics"
+    }
+  },
+  {
+    "model": "bangazon_customer_api.ProductType",
+    "pk": 2,
+    "fields": {
+      "name": "Swim Wear"
+    }
+  }
+]
