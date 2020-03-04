@@ -1,4 +1,4 @@
-from customer import Customer
+from .customer import Customer
 from django.db import models
 
 class PaymentType(models.Model):
