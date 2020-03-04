@@ -54,3 +54,18 @@ class ProductTypes(ViewSet):
             except Exception as ex:
                 return HttpResponseServerError(ex)
         
+    def retrieve(self, request, pk=None):
+        """Handle GET requests to product types resource for a single product type
+
+        Returns:
+            Response -- JSON serialized list of park areas
+        """
+        try:
+            product_type = ProductType.objects.get(pk=pk)
+            serializer = ProductTypeSerializer(
+                product_type,
+                context={'request': request}
+            )
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
