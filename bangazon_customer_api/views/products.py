@@ -26,7 +26,7 @@ class ProductsSerializer(serializers.HyperlinkedModelSerializer):
                   'quantity', 'location', 'image_path', 'customer', 'product_type', )
         depth = 1
 
-
+# /products/1
 class Products(ViewSet):
     """products for bangazon"""
 
