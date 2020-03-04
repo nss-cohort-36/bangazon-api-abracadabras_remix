@@ -10,8 +10,8 @@ class ProductType(models.Model):
     name = models.CharField(max_length=55)
 
     class Meta:
-        verbose_name = ("product_type")
-        verbose_name_plural = ("product_types")
+        verbose_name = ("producttype")
+        verbose_name_plural = ("producttypes")
 
     def __str__(self):
         return self.name

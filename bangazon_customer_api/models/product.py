@@ -1,5 +1,5 @@
 from django.db import models
-from bangazon_customer_api.models import Customer
+from .customer import Customer
 from .product_type import ProductType
 
 class Product(models.Model):
