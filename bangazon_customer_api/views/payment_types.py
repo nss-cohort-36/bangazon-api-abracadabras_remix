@@ -35,7 +35,7 @@ class PaymentTypes(ViewSet):
             
             Return:
                 This returns a json serialized payment type instance
-            
+            Author: JBell
             """
             
             try:
@@ -81,7 +81,7 @@ class PaymentTypes(ViewSet):
 
             except Exception as ex:
                 return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+# This should handle the update or edit request. -JB
         def update(self, request, pk=None):
             """Handle PUT requests for an individual payment type item
             Returns:
