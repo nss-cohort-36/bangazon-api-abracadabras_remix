@@ -13,8 +13,8 @@ class PaymentType(models.Model):
 
     class Meta:
         ordering = ("created_at",)
-        verbose_name = ("paymentType")
-        verbose_name_plural = ("paymentTypes")
+        verbose_name = ("paymenttype")
+        verbose_name_plural = ("paymenttypes")
 
     def __str__(self):
         return f'Merchant Name--{self.merchant_name}. Account Number--{self.acct_number}. Expiration Date--{self.expiration_date}'
