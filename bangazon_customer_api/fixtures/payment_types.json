@@ -1,6 +1,6 @@
 [
     {
-        "model": "bangazonapi.PaymentType",
+        "model": "bangazon_customer_api.PaymentType",
         "pk": 1,
         "fields": {
             "merchant_name": "O Positive",

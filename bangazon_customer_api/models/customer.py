@@ -12,7 +12,7 @@ class Customer(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-    # is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

@@ -1,6 +1,6 @@
 [
     {
-      "model": "bangazonapi.order",
+      "model": "bangazon_customer_api.Order",
       "pk": 1,
       "fields": {
         "created_at": "2020-02-21 00:00:00",
