@@ -15,7 +15,7 @@ class PaymentTypeSerializer(serializers.HyperlinkedModelSerializer):
     Arguments:
         serializers.HyperlinkedModelSerializer
 
-    This is a Jeremiah Bell Disaster
+    Author: Jeremiah Bell
     """
 
     class Meta:
@@ -24,7 +24,7 @@ class PaymentTypeSerializer(serializers.HyperlinkedModelSerializer):
             view_name='paymenttype',
             lookup_field='id'
         )
-        fields = ('id', 'merchant_name', 'acct_no', 'expiration_date', 'customer_id', 'created_at')
+        fields = ('id', 'merchant_name', 'acct_number', 'expiration_date', 'customer_id', 'created_at')
         # depth is only necessary with foreign keys.
         depth = 2
 
@@ -89,19 +89,21 @@ class PaymentTypes(ViewSet):
             """
             paymenttype = PaymentType.objects.get(pk=pk)
             paymenttype.merchant_name = request.data["merchant_name"]
-            paymenttype.acct_no = request.data["acct_no"]
+            paymenttype.acct_number = request.data["acct_number"]
             paymenttype.expiration_date = request.data["expiration_date"]
             paymenttype.customer_id = request.auth.user.customer.id
 
             paymenttype.save()
 
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            serializer = PaymentTypeSerializer(paymenttype, context={'request': request})
+
+            return Response(serializer.data)
 
     # Handles the creation of an object
         def create(self, request):
             new_paymenttype = PaymentType()
             new_paymenttype.merchant_name = request.data["merchant_name"]
-            new_paymenttype.acct_no = request.data["acct_no"]
+            new_paymenttype.acct_number = request.data["acct_number"]
             new_paymenttype.expiration_date = request.data["expiration_date"]
             new_paymenttype.customer_id = request.auth.user.customer.id
 
