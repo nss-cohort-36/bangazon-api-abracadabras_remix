@@ -1,15 +1,25 @@
 # THIS IS A FAKE DATABASE that is created and destroyed for every single database! This is what allows us to work with this without crossing streams of databases.
 
-import json
 from rest_framework import status
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 from django.test import TestCase
 from django.urls import reverse
-from bangazon_customer_api.models import PaymentType
+from bangazon_customer_api.models import PaymentType, Customer
 
 print("test file loads-----------------")
 
 
 class TestPaymentType(TestCase):
+
+    def setUp(self):
+        self.username = 'testuser'
+        self.password = 'foobar'
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+        self.customer = Customer.objects.create(
+        user=self.user)
+        self.token = Token.objects.create(user=self.user)
+
     def test_post_paymenttype(self):
         # Creating an instance of an object for payment type?
         # I think I need to create an example object to post here based on what is shown in the chapter.
@@ -29,7 +39,7 @@ class TestPaymentType(TestCase):
 
         # use client(client is a specific method not client side) to send the request and store the response
         response = self.client.post(
-            reverse('paymenttype-list'), new_paymenttype
+            reverse('paymenttype-list'), new_paymenttype, HTTP_AUTHORIZATION='Token ' + str(self.token)
         )
         
         # 200 get for a success message
@@ -40,3 +50,6 @@ class TestPaymentType(TestCase):
         
         # see if it is the one we just addded ensuring the data is passing correctly and accurately
         self.assertEqual(PaymentType.objects.get().merchant_name, 'A Negative')
+
+if __name__ == '__main__':
+    unittest.main()
