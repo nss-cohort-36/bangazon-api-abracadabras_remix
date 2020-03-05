@@ -36,7 +36,7 @@ class TestPaymentType(TestCase):
         self.assertEqual(response.status_code, 200)
         
         # Query the table to see if there is in fact one instance of PaymentType in it.
-        self.assertEqual(ParkArea.objects.count(), 1)
+        self.assertEqual(PaymentType.objects.count(), 1)
         
         # see if it is the one we just addded ensuring the data is passing correctly and accurately
-        
+        self.assertEqual(PaymentType.objects.get().merchant_name, 'A Negative')
