@@ -2,7 +2,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from bangazon_customer_api.models import Order
+from bangazon_customer_api.models import Order, OrderProduct, Customer
 from .customers import CustomerSerializer
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
@@ -111,10 +111,17 @@ class Orders(ViewSet):
             Response -- Empty body with 204 status code
         """
         order = Order.objects.get(pk=pk)
+        order.created_at = request.data["created_at"]
+        order.customer_id = request.data["customer_id"]
         order.payment_type_id = request.data["payment_type_id"]
         order.save()
 
-        return Response({}, status=status.HTTP_204_NO_CONTENT)
+        serializer = OrderSerializer(
+            order,
+            context={'request': request}
+            )
+
+        return Response(serializer.data)
 
 
     # handles DELETE
@@ -136,3 +143,76 @@ class Orders(ViewSet):
         except Exception as ex:
             return Response({'message': ex.arg[0]},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# from django.http import HttpResponseServerError
+# from rest_framework.viewsets import ViewSet
+# from rest_framework.response import Response
+# from rest_framework import serializers
+# from rest_framework import status
+# from bangazon_customer_api.models import Order, OrderProduct, Customer
+# class OrderSerializer(serializers.HyperlinkedModelSerializer):
+#     """JSON serializer for orders
+#     Arguments:
+#         serializers
+#     """
+#     class Meta:
+#         model = Order
+#         url = serializers.HyperlinkedIdentityField(
+#             view_name='order',
+#             lookup_field='id'
+#         )
+#         fields = ('id', 'created_at', 'customer')
+#         depth = 2
+# class Orders(ViewSet):
+#     def retrieve(self, request, pk=None):
+#         """Handle GET requests for a single order
+#         Returns:
+#             Response -- JSON serialized order instance
+#         """
+#         try:
+#             order = Order.objects.get(pk=pk)
+#             serializer = OrderSerializer(Order, context={'request': request})
+#             return Response(serializer.data)
+#         except Exception as ex:
+#             return HttpResponseServerError(ex)
+#     def list(self, request):
+#         """Handle GET requests to order
+#         Returns:
+#             Response -- JSON serialized list of order
+#         """
+#         order = Order.objects.all()
+#         customer_id = request.auth.user.customer.id
+#         logged_in_customer = self.request.query_params.get('customer', False)
+#         if logged_in_customer == 'true':
+#             order = Order.objects.filter(customer__id=customer_id)
+#         open_order = self.request.query_params.get('open', False)
+#         if open_order == 'true':
+#             order = Order.objects.filter(payment_type__id=None)
+#         serializer = OrderSerializer(
+#            order,
+#             many=True,
+#             context={'request': request}
+#         )
+#         return Response(serializer.data)
+#     def destroy(self, request, pk=None):
+#         """Handle DELETE requests for a order
+#         Returns:
+#             Response -- 200, 404, or 500 status code
+#         """
+#         try:
+#             order = Order.objects.get(pk=pk)
+#             order.delete()
+#             return Response({}, status=status.HTTP_204_NO_CONTENT)
+#         except Order.DoesNotExist as ex:
+#             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+#         except Exception as ex:
+#             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#     def update(self, request, pk=None):
+#         """Handle PUT requests for an order
+#         Returns:
+#             Response -- Empty body with 204 status code
+#         """
+#         order = Order.objects.get(pk=pk)
+#         order.payment_type_id = request.data["payment_type_id"]
+#         order.save()
+#         return Response({}, status=status.HTTP_204_NO_CONTENT)
