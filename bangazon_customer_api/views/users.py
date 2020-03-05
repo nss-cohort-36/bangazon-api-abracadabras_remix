@@ -13,10 +13,10 @@ class UsersSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = Users
-        # url = serializers.HyperlinkedIdentityField(
-        #     view_name='users',
-        #     lookup_field='id'
-        # )
+        url = serializers.HyperlinkedIdentityField(
+            view_name='users',
+            lookup_field='id'
+        )
         fields = ('id', 'name')
 
 class Users(ViewSet):
