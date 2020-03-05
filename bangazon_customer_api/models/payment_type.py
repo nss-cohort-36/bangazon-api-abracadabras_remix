@@ -1,6 +1,7 @@
 from .customer import Customer
 from django.db import models
 
+
 class PaymentType(models.Model):
     """ This model is for payment types. Created by Erin Polley, Esq."""
 
@@ -11,9 +12,9 @@ class PaymentType(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     class Meta:
-        ordering = ("-created_at",)
-        verbose_name = ("payment_type")
-        verbose_name_plural = ("payment_types")
+        ordering = ("created_at",)
+        verbose_name = ("paymenttype")
+        verbose_name_plural = ("paymenttypes")
 
     def __str__(self):
         return f'Merchant Name--{self.merchant_name}. Account Number--{self.acct_number}. Expiration Date--{self.expiration_date}'

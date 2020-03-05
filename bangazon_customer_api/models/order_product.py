@@ -1,6 +1,6 @@
 from django.db import models
-from .orders import Order
-from .products import Product
+from .order import Order
+from .product import Product
 
 class OrderProduct(models.Model):
     """
@@ -13,8 +13,8 @@ class OrderProduct(models.Model):
 
 
     class Meta:
-        verbose_name = ("order_product")
-        verbose_plural = ("order_products")
+        verbose_name = ("orderProduct")
+        verbose_name_plural = ("orderProducts")
 
     def __str__(self):
-        return f'Order: {self.order.id}\n Product/s: ${self.product.name}' 
+        return f'Order: {self.order.id}\n Product/s: ${self.product.name}'
