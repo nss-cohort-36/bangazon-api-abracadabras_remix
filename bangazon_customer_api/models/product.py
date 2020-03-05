@@ -21,7 +21,7 @@ class Product(models.Model):
     customer = models.ForeignKey(
         Customer, on_delete=models.DO_NOTHING, related_name="customers")
     product_type = models.ForeignKey(
-        ProductType, on_delete=models.DO_NOTHING, related_name="product_types"
+        ProductType, null=True, on_delete=models.DO_NOTHING, related_name="product_types"
     )
 
 class Meta:
