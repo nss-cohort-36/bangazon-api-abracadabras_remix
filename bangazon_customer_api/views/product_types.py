@@ -69,7 +69,11 @@ class ProductTypes(ViewSet):
         type.name = request.data["name"]
         type.save()
 
-        return Response({}, status=status.HTTP_204_NO_CONTENT)
+        serializer = ProductTypeSerializer(
+            type,
+            context={'request': request}
+            )
+        return Response(serializer.data)
 
     def destroy(self, request, pk=None):
         """Handle DELETE requests to product type
