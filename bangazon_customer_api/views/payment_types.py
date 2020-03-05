@@ -95,7 +95,9 @@ class PaymentTypes(ViewSet):
 
             paymenttype.save()
 
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            serializer = PaymentTypeSerializer(paymenttype, context={'request': request})
+
+            return Response(serializer.data)
 
     # Handles the creation of an object
         def create(self, request):
