@@ -62,3 +62,7 @@ class Products(ViewSet):
         serializer = ProductsSerializer(
             products, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+
+        
