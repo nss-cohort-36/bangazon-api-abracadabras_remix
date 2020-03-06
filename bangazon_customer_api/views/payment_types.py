@@ -54,11 +54,13 @@ class PaymentTypes(ViewSet):
             """
 
             payment_types = PaymentType.objects.all()
+            payment_types = PaymentType.objects.filter(customer_id=request.auth.user.customer.id)
+            
+            # setting variable customer locally equal to self(paymentTypeClassObject) and checking to see if there is a customer in the request.
+            # customer = self.request.query_params.get('customer', None) 
 
-            customer = self.request.query_params.get('customer', None)
-
-            if customer is not None:
-                payment_types = payment_types.filter(customer_id=customer)
+            # if customer is not None:
+            #     payment_types = payment_types.filter(customer_id=customer)
 
             serializer = PaymentTypeSerializer(payment_types, many = True, context={'request': request})
 
