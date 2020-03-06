@@ -50,6 +50,33 @@ class TestPaymentType(TestCase):
         
         # see if it is the one we just addded ensuring the data is passing correctly and accurately
         self.assertEqual(PaymentType.objects.get().merchant_name, 'A Negative')
+        
+    def test_get_paymenttype(self):
+    
+        # Wait! Why are we saving a PaymentType instance again?
+        # We are creating and saving an instance of new_paymmenttype in the fake database so it has something to perform the get method on. No data. NO fetch. Remember this.
+        new_paymenttype = PaymentType.objects.create(
+            merchant_name="A Negative",
+            acct_number="99988833",
+            expiration_date="2024-01-01",
+            customer_id= 1,
+            created_at="2019-01-01"
+        )
+
+        # Grabbing all the fake data from the fake database and providing token for authorization.
+        response = self.client.get(reverse('paymenttype-list'),HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+
+        # Check that the response is 200 OK.
+        # This is checking for the GET request result, not the POST. We already checked that POST works in the previous test!
+        self.assertEqual(response.status_code, 200)
+
+        # Check that the rendered context contains 1 paymenttype.
+        self.assertEqual(len(response.data), 1)
+
+        # Finally, test the actual rendered content as the browser would receive it
+        # .encode converts from unicode to utf-8. Don't get hung up on this. It's just how we can compare apples to apples
+        self.assertIn(new_paymenttype.merchant_name.encode(), response.content)
 
 if __name__ == '__main__':
     unittest.main()
