@@ -28,6 +28,8 @@ class ProductTypes(ViewSet):
             Response -- JSON serialized list of park attractions
         """
         product_types = ProductType.objects.all()
+        # product_types = ProductType.objects.filter(product_type_id=)
+
         serializer = ProductTypeSerializer(
             product_types,
             many=True,
