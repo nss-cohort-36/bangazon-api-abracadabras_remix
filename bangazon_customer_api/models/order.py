@@ -17,7 +17,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     payment_type = models.ForeignKey(PaymentType, on_delete=models.DO_NOTHING, null=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, null=True)
 
     class Meta:
         ordering = ("created_at", )
