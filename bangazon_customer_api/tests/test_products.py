@@ -115,7 +115,7 @@ class TestProduct(TestCase):
         )
 
         product = Product.objects.create(
-            name = "Red Shirt",
+            name = "Blue Bike",
             price = 10.00,
             quantity = 1,
             description = "A mighty bike for tiny tykes",
@@ -123,7 +123,7 @@ class TestProduct(TestCase):
             image_path = "./none_pic.jpg",
             created_at = "2020-02-21 00:00:00",
             customer_id = 1,
-            product_type_id = 2
+            product_type_id = 1
         )
 
         # use client(client is a specific method not client side)
