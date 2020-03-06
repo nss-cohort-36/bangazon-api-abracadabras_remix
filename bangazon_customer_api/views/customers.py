@@ -39,3 +39,17 @@ class Customers(ViewSet):
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
+        
+    def update(self, request, pk=None):
+        """Handles Edit/Update Request
+        Response is passing error message 204.
+        """
+        customer = Customer.objects.get(pk=pk)
+        user = customer.user
+        user.first_name = request.data["first_name"]
+        user.last_name = request.data["last_name"]
+        user.email = request.data["email"]
+        
+        user.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
