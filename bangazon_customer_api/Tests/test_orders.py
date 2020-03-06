@@ -43,7 +43,40 @@ class TestOrders(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         
         # see if it is the one we just addded ensuring the data is passing correctly and accurately
-        self.assertEqual(Order.objects.get().payment_type, '3')
+        self.assertEqual(Order.objects.get().customer.id, 1)
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+def test_list_orders(self):
+        list_orders = Order.objects.create (
+           {"customer": "1",
+            "payment_type": "3",
+            "created_at": "2024-01-01"
+           }
+        ),
+        list_orders = Order.objects.create (
+           {"customer": "2",
+            "payment_type": "1",
+            "created_at": "2020-07-26"
+           }
+        )
+
+        # use client(client is a specific method not client side) to send the request and store the response
+        response = self.client.get(
+            reverse('order-list'))
+        
+        # 200 get for a success message
+        self.assertEqual(response.status_code, 200)
+        
+        # Query the table to see if there is in fact one instance of Order in it.
+        self.assertEqual(len(response.data), 2)
+        
+        self.assertEqual(response.data[0]["customer"], 1)
+
+        # see if it is the one we just addded ensuring the data is passing correctly and accurately
+        self.assertIn(list_orders.customer.id.encode(),response.content)
 
 if __name__ == '__main__':
     unittest.main()
