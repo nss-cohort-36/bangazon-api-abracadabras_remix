@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'bangazon_customer_api'
 ]
 
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',

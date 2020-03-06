@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.urls import path, include
 from rest_framework import routers
-from bangazon_customer_api.views import register_user, login_user, ProductTypes, Products, Customers, Orders, PaymentTypes
+from bangazon_customer_api.views import register_user, login_user, ProductTypes, Products, Customers, Orders, PaymentTypes,OrderProducts
 from rest_framework.authtoken.views import obtain_auth_token
 from bangazon_customer_api.models import *
 
@@ -28,7 +28,7 @@ router.register(r'products', Products, 'product')
 router.register(r'paymenttypes', PaymentTypes, 'paymenttype')
 router.register(r'producttypes', ProductTypes, 'producttype')
 # router.register(r'users', User, 'user')
-# router.register(r'orderproducts', OrderProducts, 'orderproduct')
+router.register(r'orderproducts', OrderProducts, 'orderproduct')
 
 urlpatterns = [
     path('', include(router.urls)),
