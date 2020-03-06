@@ -11,7 +11,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         serializers.HyperlinkedModelSerializer
     """
     
-    customer = CustomerSerializer()
+    # customer = CustomerSerializer()
     
     class Meta:
         model = Order
@@ -20,9 +20,8 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             view_name="order",
             lookup_field='id'
         )
-        fields = ('id', 'created_at', 'customer', 'payment_type_id', 'product')
+        fields = ('id', 'created_at', 'customer_id', 'payment_type_id', 'product_id')
         
-        depth = 2
         
 class Orders(ViewSet):
     """Orders for Bangazon API"""
@@ -82,22 +81,24 @@ class Orders(ViewSet):
         """
         # list of order instances
         orders = Order.objects.all()
-        customer_id = request.auth.user.customer.id
+        orders = Order.objects.filter(customer_id=request.auth.user.customer.id)
 
         # filter by the logged in customer
-        is_one_customer = self.request.query_params.get('customer', False)
-        if is_one_customer == 'true':
-            orders = orders.filter(customer__id=customer_id)
+        # is_one_customer = self.request.query_params.get('customer', False)#
+        # if is_one_customer == 'true':
+        #     orders = orders.filter(customer__id=customer_id) #if there is a true customer, 
+        #     #filter them by the id of its associated customer
 
-        # filter by open orders
-        is_open = self.request.query_params.get('open', False)
-        if is_open == 'true':
-            orders = orders.filter(payment_type__id=None)
+        # # filter by open orders
+        # is_open = self.request.query_params.get('open', False) #instance of the class,
+        # #request to browser and get response, what is returned, get the value of the model
+        # if is_open == 'true':
+        #     orders = orders.filter(payment_type__id=None) #check if the order is closed by payment type being being none
             
         # takes orders and converts to JSON
         serializer = OrderSerializer(
             orders,
-            many=True,
+            many=True, #query has multiple items otherwise serializer will only return one object
             context={'request': request}
         )
         # Return the JSON
