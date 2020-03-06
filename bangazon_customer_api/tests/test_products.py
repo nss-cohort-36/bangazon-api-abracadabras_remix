@@ -13,10 +13,12 @@ print("test file loads-----------------")
 class TestProduct(TestCase):
 
     def setUp(self):
+        self.name = "Toys"
         self.username = 'testuser'
         self.password = 'foobar'
         self.user = User.objects.create_user(username=self.username, password=self.password)
         self.customer = Customer.objects.create(user=self.user)
+        self.product_type_id = ProductType.objects.create(name=self.name)
         self.token = Token.objects.create(user=self.user)
 
     def test_post_product(self):
