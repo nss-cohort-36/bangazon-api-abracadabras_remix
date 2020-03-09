@@ -52,7 +52,8 @@ class PaymentTypes(ViewSet):
             Return:
                 This returns json serialized(jsonified) list of payment types
             """
-
+            
+            
             payment_types = PaymentType.objects.all()
             payment_types = PaymentType.objects.filter(customer_id=request.auth.user.customer.id)
             
