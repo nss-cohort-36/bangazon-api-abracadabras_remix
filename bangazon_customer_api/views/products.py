@@ -64,6 +64,11 @@ class Products(ViewSet):
         # if product_name is not None:
         #     products = products.filter(name=product_name)
 
+        producttype = self.request.query_params.get('producttype', None)
+
+        if producttype is not None:
+            products = products.filter(product_type__id=producttype)
+
         serializer = ProductsSerializer(
             products, many=True, context={'request': request})
         return Response(serializer.data)
