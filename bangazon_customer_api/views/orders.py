@@ -2,16 +2,16 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from bangazon_customer_api.models import Order, OrderProduct, Customer
+from bangazon_customer_api.models import Order, OrderProduct, Customer, Product
 from .customers import CustomerSerializer
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for park areas
+    """JSON serializer for orders
     Arguments:
         serializers.HyperlinkedModelSerializer
     """
     
-    customer = CustomerSerializer()
+    # customer = CustomerSerializer()
     
     class Meta:
         model = Order
@@ -20,9 +20,8 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             view_name="order",
             lookup_field='id'
         )
-        fields = ('id', 'created_at', 'customer', 'payment_type_id')
+        fields = ('id', 'created_at', 'customer_id', 'payment_type_id', 'product_id')
         
-        depth = 2
         
 class Orders(ViewSet):
     """Orders for Bangazon API"""
@@ -82,22 +81,24 @@ class Orders(ViewSet):
         """
         # list of order instances
         orders = Order.objects.all()
-        customer_id = request.auth.user.customer.id
+        orders = Order.objects.filter(customer_id=request.auth.user.customer.id)
 
         # filter by the logged in customer
-        is_one_customer = self.request.query_params.get('customer', False)
-        if is_one_customer == 'true':
-            orders = orders.filter(customer__id=customer_id)
+        # is_one_customer = self.request.query_params.get('customer', False)#
+        # if is_one_customer == 'true':
+        #     orders = orders.filter(customer__id=customer_id) #if there is a true customer, 
+        #     #filter them by the id of its associated customer
 
-        # filter by open orders
-        is_open = self.request.query_params.get('open', False)
-        if is_open == 'true':
-            orders = orders.filter(payment_type__id=None)
+        # # filter by open orders
+        # is_open = self.request.query_params.get('open', False) #instance of the class,
+        # #request to browser and get response, what is returned, get the value of the model
+        # if is_open == 'true':
+        #     orders = orders.filter(payment_type__id=None) #check if the order is closed by payment type being being none
             
         # takes orders and converts to JSON
         serializer = OrderSerializer(
             orders,
-            many=True,
+            many=True, #query has multiple items otherwise serializer will only return one object
             context={'request': request}
         )
         # Return the JSON
@@ -114,6 +115,7 @@ class Orders(ViewSet):
         order.created_at = request.data["created_at"]
         order.customer_id = request.data["customer_id"]
         order.payment_type_id = request.data["payment_type_id"]
+        order.product = request.data["product_id"]
         order.save()
 
         serializer = OrderSerializer(
@@ -143,76 +145,3 @@ class Orders(ViewSet):
         except Exception as ex:
             return Response({'message': ex.arg[0]},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# from django.http import HttpResponseServerError
-# from rest_framework.viewsets import ViewSet
-# from rest_framework.response import Response
-# from rest_framework import serializers
-# from rest_framework import status
-# from bangazon_customer_api.models import Order, OrderProduct, Customer
-# class OrderSerializer(serializers.HyperlinkedModelSerializer):
-#     """JSON serializer for orders
-#     Arguments:
-#         serializers
-#     """
-#     class Meta:
-#         model = Order
-#         url = serializers.HyperlinkedIdentityField(
-#             view_name='order',
-#             lookup_field='id'
-#         )
-#         fields = ('id', 'created_at', 'customer')
-#         depth = 2
-# class Orders(ViewSet):
-#     def retrieve(self, request, pk=None):
-#         """Handle GET requests for a single order
-#         Returns:
-#             Response -- JSON serialized order instance
-#         """
-#         try:
-#             order = Order.objects.get(pk=pk)
-#             serializer = OrderSerializer(Order, context={'request': request})
-#             return Response(serializer.data)
-#         except Exception as ex:
-#             return HttpResponseServerError(ex)
-#     def list(self, request):
-#         """Handle GET requests to order
-#         Returns:
-#             Response -- JSON serialized list of order
-#         """
-#         order = Order.objects.all()
-#         customer_id = request.auth.user.customer.id
-#         logged_in_customer = self.request.query_params.get('customer', False)
-#         if logged_in_customer == 'true':
-#             order = Order.objects.filter(customer__id=customer_id)
-#         open_order = self.request.query_params.get('open', False)
-#         if open_order == 'true':
-#             order = Order.objects.filter(payment_type__id=None)
-#         serializer = OrderSerializer(
-#            order,
-#             many=True,
-#             context={'request': request}
-#         )
-#         return Response(serializer.data)
-#     def destroy(self, request, pk=None):
-#         """Handle DELETE requests for a order
-#         Returns:
-#             Response -- 200, 404, or 500 status code
-#         """
-#         try:
-#             order = Order.objects.get(pk=pk)
-#             order.delete()
-#             return Response({}, status=status.HTTP_204_NO_CONTENT)
-#         except Order.DoesNotExist as ex:
-#             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
-#         except Exception as ex:
-#             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-#     def update(self, request, pk=None):
-#         """Handle PUT requests for an order
-#         Returns:
-#             Response -- Empty body with 204 status code
-#         """
-#         order = Order.objects.get(pk=pk)
-#         order.payment_type_id = request.data["payment_type_id"]
-#         order.save()
-#         return Response({}, status=status.HTTP_204_NO_CONTENT)

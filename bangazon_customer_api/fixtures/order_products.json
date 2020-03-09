@@ -1,12 +1,20 @@
 [
     {
+        "model": "bangazon_customer_api.Order",
+        "pk": 1,
+        "fields":{
         "id": 1,
         "product_id": 2,
         "order_id": 1
+    }
     },
     {
+        "model": "bangazon_customer_api.Order",
+        "pk": 2,
+        "fields":{
         "id": 2,
-        "product_id": 1,
-        "order_id": 1
+        "product_id": 2,
+        "order_id": 2
+    }    
     }
 ]

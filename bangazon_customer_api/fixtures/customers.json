@@ -8,4 +8,14 @@
             "created_at": "2020-03-02"
         }
     }
+
+    {
+        "model": "bangazon_customer_api.Customer",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "is_active": 1,
+            "created_at": "2020-03-02"
+        }
+    }
 ]
