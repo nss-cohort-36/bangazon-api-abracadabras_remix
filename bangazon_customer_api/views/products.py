@@ -3,9 +3,9 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from bangazon_customer_api.models import Product
-from django.contrib.auth.models import User
-from .customers  import CustomerSerializer
+from bangazon_customer_api.models import Product, Customer
+# from django.contrib.auth.models import User
+from .customers import CustomerSerializer
 
 
 class ProductsSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,7 +24,7 @@ class ProductsSerializer(serializers.HyperlinkedModelSerializer):
         )
         fields = ('id', 'url', 'name', 'price', 'description',
                   'quantity', 'location', 'image_path', 'customer', 'product_type', 'created_at')
-        depth = 1
+        depth = 2
 
 # /products/1
 class Products(ViewSet):
@@ -55,6 +55,8 @@ class Products(ViewSet):
         """
         # customer_id = request.auth.user.customer.id
         products = Product.objects.all()
+        products = Product.objects.filter(customer_id=request.auth.user.customer.id)
+
 
         # product_name = self.request.query_params.get('name', None)
         # is_one_customer = self.request.query_params.get('customer', False)
@@ -64,6 +66,7 @@ class Products(ViewSet):
         # if product_name is not None:
         #     products = products.filter(name=product_name)
 
+        serializer = ProductsSerializer(products, many=True, context={'request': request})
         producttype = self.request.query_params.get('producttype', None)
 
         if producttype is not None:
@@ -82,6 +85,8 @@ class Products(ViewSet):
         Returns:
             Response -- JSON serialized ParkArea instance
         """
+
+        # print(request.auth.user.customer) This print statement digs down into what each of these words mean
         newproduct = Product()
         newproduct.name = request.data["name"]
         newproduct.price = request.data["price"]
@@ -90,7 +95,8 @@ class Products(ViewSet):
         newproduct.location = request.data["location"]
         newproduct.image_path = request.data["image_path"]
         newproduct.created_at = request.data["created_at"]
-        newproduct.customer_id = request.data["customer_id"]
+        # below: we shouldn't send the customer id for security reasons. send as request.auth.user.customer.id - this is your token that represents the user youare logged in as.
+        newproduct.customer_id = request.auth.user.customer.id
         newproduct.product_type_id = request.data["product_type_id"]
         newproduct.save()
 
