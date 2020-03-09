@@ -67,6 +67,13 @@ class Products(ViewSet):
         #     products = products.filter(name=product_name)
 
         serializer = ProductsSerializer(products, many=True, context={'request': request})
+        producttype = self.request.query_params.get('producttype', None)
+
+        if producttype is not None:
+            products = products.filter(product_type__id=producttype)
+
+        serializer = ProductsSerializer(
+            products, many=True, context={'request': request})
         return Response(serializer.data)
 
     # handles POST to make a new product

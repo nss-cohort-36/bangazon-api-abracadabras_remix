@@ -1,1 +1,0 @@
-from .test_product_types import TestProductType
